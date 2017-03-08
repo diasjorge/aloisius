@@ -95,7 +95,7 @@ class Stack(object):
         while True:
             stack = self._describe_stack()
             if stack and stack.stack_status.endswith('_IN_PROGRESS'):
-                self.sleep(self.sleep_seconds)
+                time.sleep(self.sleep_seconds)
             else:
                 break
 
