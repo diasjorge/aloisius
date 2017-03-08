@@ -5,7 +5,6 @@ from aloisius import Stack, StackException
 
 import mock
 from moto import mock_cloudformation
-from moto.cloudformation import cloudformation_backends
 import pytest
 
 dummy_template = {
@@ -27,6 +26,7 @@ dummy_template = {
     }
 }
 
+
 @mock_cloudformation
 def test_stack_is_created():
     stack = Stack(
@@ -36,6 +36,7 @@ def test_stack_is_created():
         TemplateBody=json.dumps(dummy_template)
     )
     assert re.match("vpc-[a-z0-9]+", stack.outputs['VPC'])
+
 
 @mock_cloudformation
 def test_stack_create_failed_raises_exception(monkeypatch):
@@ -50,4 +51,4 @@ def test_stack_create_failed_raises_exception(monkeypatch):
             RegionName='eu-west-1',
             TemplateBody=json.dumps(dummy_template)
         )
-        print stack.outputs['VPC'] # Wait for result
+        stack.outputs['VPC']  # Wait for result

@@ -207,6 +207,5 @@ class FutureOutputs(Mapping):
 
     def _get_result(self):
         if self._result is None:
-            self._result = self._stack._executor.submit(
-                lambda: self._stack._future.result()).result()
+            self._result = self._stack._future.result()
         return self._result
