@@ -122,13 +122,16 @@ class Stack(object):
                 return None
             # Otherwise there should always be a stack.
             assert stack, "Shoot! Where is my stack? :("
+
+            # Raise an exception if the stack operation has failed.
+            if self._failed_stack(stack.stack_status):
+                msg = 'Stack operation {!r} has failed.'
+                raise StackException(msg.format(stack_operation))
+
             # Return if the stack operation is complete.
             if stack.stack_status.endswith('_COMPLETE'):
                 return stack
-            # Raise an exception if the stack operation has failed.
-            if stack.stack_status.endswith('_FAILED'):
-                msg = 'Stack operation {!r} has failed.'
-                raise StackException(msg.format(stack_operation))
+
             # Sleep if the stack operation neither is complete nor has failed.
             time.sleep(self.sleep_seconds)
 
@@ -189,6 +192,9 @@ class Stack(object):
                     raise err
             time.sleep(self.sleep_seconds * (2 ** retries))
             retries += 1
+
+    def _failed_stack(self, status):
+        return status.endswith('_FAILED') or "ROLLBACK" in status
 
 
 class FutureOutputs(Mapping):

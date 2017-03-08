@@ -52,3 +52,19 @@ def test_stack_create_failed_raises_exception(monkeypatch):
             TemplateBody=json.dumps(dummy_template)
         )
         stack.outputs['VPC']  # Wait for result
+
+
+@mock_cloudformation
+def test_stack_rollback(monkeypatch):
+    def mock_return(_):
+        return mock.Mock(stack_status='ROLLBACK_COMPLETE')
+    monkeypatch.setattr(Stack, '_describe_stack', mock_return)
+
+    with pytest.raises(StackException):
+        stack = Stack(
+            StackName='dummy_failed',
+            TargetState='present',
+            RegionName='eu-west-1',
+            TemplateBody=json.dumps(dummy_template)
+        )
+        stack.outputs['VPC']  # Wait for result
