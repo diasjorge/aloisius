@@ -19,4 +19,4 @@ install:
 # command to run tests
 script:
   - py.test
-  - flake8
+  - if [[ $TRAVIS_PYTHON_VERSION != 2.6 ]]; then flake8; fi
