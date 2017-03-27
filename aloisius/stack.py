@@ -187,8 +187,6 @@ class Stack(object):
             try:
                 return func(*args, **kwargs)
             except ClientError as err:
-                import pdb; pdb.set_trace()
-
                 error_code = err.response['Error']['Code']
                 if error_code != 'Throttling' or retries == self.max_retries:
                     raise err
