@@ -12,5 +12,6 @@ def export(defn):
 
 
 from .stack_collection import StackCollection  # noqa: E402
+from .stack import Stack  # noqa: E402,F401
 
 stacks = StackCollection()
