@@ -8,7 +8,6 @@ from concurrent.futures import ThreadPoolExecutor
 import multiprocessing
 import time
 
-from boto3.session import Session
 from botocore.exceptions import ClientError
 
 from . import export
@@ -72,11 +71,8 @@ class Stack(object):
                 'UsePreviousValue': False  # Always use the current value.
             } for key, val in self.kwargs['Parameters'].items()]
 
-        # Create a custom Session in our region of choice.
-        session = Session(region_name=self.kwargs['RegionName'])
-
         # Get the CloudFormation service resource.
-        self._cfn = session.resource('cloudformation')
+        self._cfn = aloisius.session.resource('cloudformation', region_name=self.kwargs['RegionName'])
 
         # Wait until no stack operation is in progress.
         self._wait_until_ready()
